@@ -1,0 +1,153 @@
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
+.Header {
+  background-color: #CC3F0C;
+}
+
+.TitleContainer {
+  padding: 10px;
+  display: inline-block;
+}
+
+.Title {
+  color: white;
+}
+
+.View {
+  background-color: #19231A;
+  flex: 1;
+}
+
+.ViewFull {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.List {
+  background-color: #9A6D38;
+}
+
+.ListFull {
+  width: 270px;
+  height: 100%;
+}
+
+.Content {
+  background-color: #D8CBC7;
+}
+
+.ContentFull {
+  width: 600px;
+  height: 100%;
+}
+
+.ProductLine {
+  padding: 10px;
+}
+
+.ListTitle {
+  color: white;
+  padding: 10px;
+}
+
+.SelectedListTitle {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.InputFormWrapped {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  row-gap: 10px;
+  padding: 15px;
+}
+
+.InputForm {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+}
+
+.AmountInput {
+  width: 60px;
+}
+
+.InputItem {
+  margin-left: 10px;
+  display: inline-block;
+}
+
+.ShortInput {
+  min-width: 140px;
+}
+
+.Separator {
+  margin: 0px 10px;
+}
+
+fieldset {
+  border:0 none;
+}
+
+.Center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.Right {
+  float: right;
+}
+
+.FullWidth {
+  display: block;
+  width: 100%;
+}
+
+.Flex {
+  display: flex;
+  align-items: center;
+}
+
+.FlexGrow {
+  flex-grow: 1;
+}
+
+.PaddingHorizontal {
+  padding: 0px 10px;
+}
+
+.MarginHorizontal {
+  margin: 0px 10px;
+}
+
+.MarginVertical {
+  margin: 10px;
+}
+
+.TextAlignLeft {
+  text-align: left;
+}
+
+.TextAlignRight {
+  text-align: right;
+}
+
+.TextAlignCenter {
+  text-align: center;
+}
+
+.Collected {
+  color: #5B5B5B;
+}
+
+.bi-check:before {
+  font-size: 2rem;
+}

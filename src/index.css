@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  font-family: 'Signika', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
+body > #root > div {
+  height: 100vh;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
