@@ -75,6 +75,7 @@ function Main() {
       headers: headers(token)
     }).then(res => {
       setLists(res.data)
+      return res.data
     })
   }
 
@@ -231,7 +232,7 @@ function Main() {
     })
   }
 
-  const createNewList = event => {
+  const createAndActivateNewList = event => {
     event.preventDefault()
     const name = event.target[0].value
 
@@ -241,9 +242,16 @@ function Main() {
         products: []
       }, {
         headers: headers(token)
-      }).then(() => {
-        refreshLists()
       })
+        .then(res => {
+          return refreshLists().then(l => { return { lists: l, id: res.data } })
+        })
+        .then(res => {
+          const newList = res.lists.find(l => l.id === res.id)
+          if (newList) {
+            setList(newList)
+          }
+        })
     }
   }
 
@@ -258,7 +266,7 @@ function Main() {
   const renderLists = () => {
     return (
       <div className={`List ${isMobile ? '' : 'ListFull'}`}>
-        {createListInput(event => createNewList(event))}
+        {createListInput(createAndActivateNewList)}
         <hr className="Separator"></hr>
 
         {createRows(lists, shared, list.id, (list) => {
