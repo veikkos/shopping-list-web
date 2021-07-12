@@ -136,14 +136,26 @@ function Main() {
   }, [isLoading, isAuthenticated]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const getProductNames = (list) => {
-    list.products.forEach(product => {
-      axios.get(`${url}/products?id=${product.id}`, {
-        headers: headers(token)
-      }).then(res => {
-        productNames[product.id] = res.data.name
+    const promises = list.products
+      .filter(product => !productNames[product.id])
+      .map(product => {
+        return axios.get(`${url}/products?id=${product.id}`, {
+          headers: headers(token)
+        }).then(res => {
+          return {
+            id: res.data.id,
+            name: res.data.name,
+          }
+        }).catch(() => { })
+      })
+
+    return Promise.all(promises)
+      .then(products => {
+        products
+          .filter(product => product)
+          .forEach(product => productNames[product.id] = product.name)
         setProductNames({ ...productNames })
       })
-    })
   }
 
   const getList = (id) => {
@@ -176,15 +188,18 @@ function Main() {
       .then(res => {
         setList(res.data)
         setLists(lists.map(l => l.id === list.id ? res.data : l))
-        refreshSharedLists()
+        getProductNames(res.data)
       })
   }
 
   const addProductToList = (id, amount, list) => {
-    list.products.push({ id, amount, collected: false })
-    return updateAndRefreshList({
-      ...list,
-    })
+    return getList(list.id)
+      .then(res => {
+        res.data.products.push({ id, amount, collected: false })
+        return updateAndRefreshList({
+          ...res.data,
+        })
+      })
   }
 
   const addProduct = (event, list) => {
