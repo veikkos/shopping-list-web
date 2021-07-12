@@ -1,5 +1,7 @@
 # Shopping List Web frontend with React
 
+![Screenshot](https://raw.githubusercontent.com/veikkos/shopping-list-web/master/media/cover.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 AWS back-end implementation implemented at https://github.com/veikkos/shopping-list-backend.
