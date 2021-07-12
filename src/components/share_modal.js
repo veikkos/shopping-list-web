@@ -1,4 +1,5 @@
-import { Modal, Button } from "react-bootstrap";
+import React from 'react'
+import { Modal, Button } from 'react-bootstrap'
 
 const ShareModal = ({ name, show, close }) => {
   return (
@@ -16,4 +17,4 @@ const ShareModal = ({ name, show, close }) => {
   )
 }
 
-export default ShareModal;
+export default ShareModal

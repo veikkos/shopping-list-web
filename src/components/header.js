@@ -1,3 +1,5 @@
+import React from 'react'
+
 const Header = ({ actions }) => (
   <div className="Header Flex">
     <div className="TitleContainer FlexGrow">
@@ -7,6 +9,6 @@ const Header = ({ actions }) => (
       {actions ? actions() : null}
     </div>
   </div>
-);
+)
 
-export default Header;
+export default Header

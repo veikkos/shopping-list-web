@@ -8,6 +8,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "bootstrap-icons": "^1.5.0",
+    "eslint": "^7.30.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-bootstrap-typeahead": "^5.1.4",
@@ -21,7 +22,9 @@
     "heroku-prebuild": "npm install -g serve",
     "start:dev": "react-scripts start",
     "start": "serve -s build",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix **/*.js"
   },
   "eslintConfig": {
     "extends": [

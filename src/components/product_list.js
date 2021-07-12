@@ -1,24 +1,25 @@
-import { Fragment } from "react";
+import React from 'react'
+import { Fragment } from 'react'
 
 export const createProducts = (list, productNames, checkChanged, removed) => {
-  const notCollected = list.products.filter(product => !product.collected);
-  const collected = list.products.filter(product => product.collected);
+  const notCollected = list.products.filter(product => !product.collected)
+  const collected = list.products.filter(product => product.collected)
 
   const renderList = l => {
     return (
       <div className="MarginHorizontal">
-        <table style={{ width: "100%" }}>
+        <table style={{ width: '100%' }}>
           <tbody className="MarginHorizontal">
             {l.map(product => {
               return (
-                <tr className={product.collected ? "Collected" : ""} key={product.id}>
+                <tr className={product.collected ? 'Collected' : ''} key={product.id}>
                   <td className="TextAlignLeft">{product.id ? productNames[product.id] : ''}</td>
                   <td className="ProductLine TextAlignCenter">{product.amount} pcs</td>
                   <td className="TextAlignCenter">
                     <label>Collected:
                       <input className="form-check-input"
                         type="checkbox"
-                        style={{ marginLeft: "10px" }}
+                        style={{ marginLeft: '10px' }}
                         checked={product.collected ? true : false}
                         onChange={event => checkChanged(event, list, product)}>
                       </input>
@@ -51,5 +52,5 @@ export const createProducts = (list, productNames, checkChanged, removed) => {
       {renderList(collected)}
     </Fragment>
 
-  );
+  )
 }

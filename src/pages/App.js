@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-} from "react-router-dom";
-import { Auth0Provider } from "@auth0/auth0-react";
-import HttpsRedirect from 'react-https-redirect';
-import Login from "./login/Login";
-import Main from "./main/Main";
+} from 'react-router-dom'
+import { Auth0Provider } from '@auth0/auth0-react'
+import HttpsRedirect from 'react-https-redirect'
+import Login from './login/Login'
+import Main from './main/Main'
 
 export default function App() {
   return (
@@ -30,5 +30,5 @@ export default function App() {
         </Router>
       </Auth0Provider>
     </HttpsRedirect>
-  );
+  )
 }

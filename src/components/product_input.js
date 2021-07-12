@@ -1,13 +1,14 @@
-import { Typeahead } from 'react-bootstrap-typeahead';
+import React from 'react'
+import { Typeahead } from 'react-bootstrap-typeahead'
 
 export const createInput = (enabled, productNames, callback) => {
   return (
-    <fieldset disabled={enabled ? '' : "disabled"}>
+    <fieldset disabled={enabled ? '' : 'disabled'}>
       <form className="InputFormWrapped" onSubmit={callback} >
         <label className="Flex FlexGrow">Product:
           <Typeahead
             className="FlexGrow"
-            style={{ display: "inline-block", paddingLeft: "10px", marginRight: "10px" }}
+            style={{ display: 'inline-block', paddingLeft: '10px', marginRight: '10px' }}
             id="product"
             placeholder="Milk, Butter..."
             options={productNames}
