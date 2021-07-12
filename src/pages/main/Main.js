@@ -191,25 +191,27 @@ function Main() {
     const name = event.target[0].value
     const amount = event.target[2].value
 
-    getProducts()
-      .then(res => {
-        const previous = res.data.find(product => product.name === name)
+    if (name) {
+      getProducts()
+        .then(res => {
+          const previous = res.data.find(product => product.name === name)
 
-        if (previous) {
-          addProductToList(previous.id, amount, list)
-        } else {
-          axios.post(`${url}/products`, {
-            name,
-          }, {
-            headers: headers(token)
-          }).then(res => {
-            const id = res.data
-            productNames[id] = name
-            setProductNames({ ...productNames })
-            addProductToList(id, amount, list)
-          })
-        }
-      })
+          if (previous) {
+            addProductToList(previous.id, amount, list)
+          } else {
+            axios.post(`${url}/products`, {
+              name,
+            }, {
+              headers: headers(token)
+            }).then(res => {
+              const id = res.data
+              productNames[id] = name
+              setProductNames({ ...productNames })
+              addProductToList(id, amount, list)
+            })
+          }
+        })
+    }
   }
 
   const checkChanged = (event, list, product) => {
@@ -231,15 +233,18 @@ function Main() {
 
   const createNewList = event => {
     event.preventDefault()
+    const name = event.target[0].value
 
-    axios.post(`${url}/lists`, {
-      name: event.target[0].value,
-      products: []
-    }, {
-      headers: headers(token)
-    }).then(() => {
-      refreshLists()
-    })
+    if (name) {
+      axios.post(`${url}/lists`, {
+        name,
+        products: []
+      }, {
+        headers: headers(token)
+      }).then(() => {
+        refreshLists()
+      })
+    }
   }
 
   const getShareUrl = () => `${window.location.origin}/app?share=${list.id}`
@@ -323,7 +328,7 @@ function Main() {
           </Fragment> :
           null}
       </div>
-      <Footer/>
+      <Footer />
     </div>
   )
 }
