@@ -285,8 +285,11 @@ function Main() {
         <hr className="Separator"></hr>
 
         {createRows(lists, shared, list.id, (list) => {
-          setList(list)
-          getProductNames(list)
+          getList(list.id)
+            .then(res => {
+              setList(res.data)
+              getProductNames(res.data)
+            })
         }, (list, shared) => {
           if (shared) {
             removeSharedList(list.id)
