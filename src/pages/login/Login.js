@@ -4,6 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useHistory } from 'react-router-dom'
 import Header from '../../components/header'
 import LoginButton from '../../components/login_button'
+import Footer from '../../components/footer'
 
 function Main() {
   const { isLoading, isAuthenticated } = useAuth0()
@@ -23,6 +24,7 @@ function Main() {
           <LoginButton />
         </div>
       </div>
+      <Footer/>
     </div>
   )
 }

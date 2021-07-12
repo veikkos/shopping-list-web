@@ -7,6 +7,10 @@
   background-color: #CC3F0C;
 }
 
+.Footer {
+  background-color: #561905;
+}
+
 .TitleContainer {
   padding: 10px;
   display: inline-block;
@@ -150,4 +154,18 @@ fieldset {
 
 .bi-check:before {
   font-size: 2rem;
+}
+
+a {
+  color: white;
+  font-size: small;
+}
+
+a:link, a:visited, a:active {
+  text-decoration: none;
+}
+
+a:hover {
+  color: white;
+  text-decoration: underline;
 }

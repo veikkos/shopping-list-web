@@ -9,6 +9,7 @@ import { createInput } from '../../components/product_input'
 import { createProducts } from '../../components/product_list'
 import { createListInput } from '../../components/list_input'
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import LogoutButton from '../../components/logout_button'
 import ShareModal from '../../components/share_modal'
 
@@ -322,6 +323,7 @@ function Main() {
           </Fragment> :
           null}
       </div>
+      <Footer/>
     </div>
   )
 }
