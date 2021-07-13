@@ -171,7 +171,7 @@ function Main() {
     })
   }
 
-  const updateList = (list) => {
+  const putList = (list) => {
     return axios.put(`${url}/lists?id=${list.id}`, list, {
       headers: headers(token)
     })
@@ -197,7 +197,7 @@ function Main() {
   }
 
   const updateAndRefreshList = (list) => {
-    return updateList(list)
+    return putList(list)
       .then(() => getList(list.id))
       .then(res => setListAndGetNames(res.data))
   }
@@ -243,18 +243,26 @@ function Main() {
   const checkChanged = (event, list, product) => {
     const updateProduct = product
     updateProduct.collected = event.target.checked
-    updateAndRefreshList({
-      ...list,
-      products: list.products.map(p => p.id !== product.id ? p : updateProduct),
-    })
+    return getList(list.id)
+      .then(res => {
+        const l = res.data
+        updateAndRefreshList({
+          ...l,
+          products: l.products.map(p => p.id !== product.id ? p : updateProduct),
+        })
+      })
   }
 
   const productRemoved = (list, products) => {
     const idsToRemove = products.map(product => product.id)
-    updateAndRefreshList({
-      ...list,
-      products: list.products.filter(p => !idsToRemove.includes(p.id)),
-    })
+    return getList(list.id)
+      .then(res => {
+        const l = res.data
+        updateAndRefreshList({
+          ...l,
+          products: l.products.filter(p => !idsToRemove.includes(p.id)),
+        })
+      })
   }
 
   const createAndActivateNewList = event => {
