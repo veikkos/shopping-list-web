@@ -35,12 +35,6 @@ function Main() {
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareAdded, setShareAdded] = useState(false)
 
-  const addUpdateSharedList = listId => {
-    return getList(listId)
-      .then(res => res.data)
-      .catch(() => { })
-  }
-
   const refreshSharedLists = () => {
     return axios.get(`${url}/shared`, {
       headers: headers(token)
@@ -48,7 +42,10 @@ function Main() {
       switch (res.status) {
       case 200:
         if (res.data.lists && res.data.lists.length) {
-          const promises = res.data.lists.map(listId => addUpdateSharedList(listId))
+          const promises =
+              res.data.lists.map(listId => getList(listId)
+                .then(res => res.data)
+                .catch(() => { }))
 
           return Promise.all(promises)
             .then(res => setShared(res.filter(s => s)))
