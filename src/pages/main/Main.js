@@ -25,8 +25,8 @@ const useQuery = () => {
 
 function Main() {
   const { user, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
-  const [lists, setLists] = useState([])
-  const [shared, setShared] = useState([])
+  const [lists, setLists] = useState(null)
+  const [shared, setShared] = useState(null)
   const [list, setList] = useState({})
   const [productNames, setProductNames] = useState({})
   const history = useHistory()
@@ -45,15 +45,22 @@ function Main() {
     return axios.get(`${url}/shared`, {
       headers: headers(token)
     }).then(res => {
-      if (res.status === 200) {
+      switch (res.status) {
+      case 200:
         if (res.data.lists && res.data.lists.length) {
           const promises = res.data.lists.map(listId => addUpdateSharedList(listId))
 
           return Promise.all(promises)
-            .then(res => setShared(res.filter(id => id)))
+            .then(res => setShared(res.filter(s => s)))
         } else {
           setShared([])
         }
+        break
+      case 204:
+        setShared([])
+        break
+      default:
+        break
       }
     })
   }
@@ -116,7 +123,7 @@ function Main() {
   }, [token]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (token && shared) {
+    if (token && shared && lists) {
       const newSharedList = query.get('share')
       if (!shareAdded &&
         newSharedList &&
@@ -124,10 +131,10 @@ function Main() {
         !shared.find(s => s.id === newSharedList)) {
         setShareAdded(true)
         postSharedLists(shared.map(s => s.id).concat(newSharedList))
-          .then(refreshSharedLists())
+          .then(refreshSharedLists)
       }
     }
-  }, [token, shared]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [token, shared, lists]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -182,14 +189,17 @@ function Main() {
     }).then(clearCurrentListIfNeeded(l.id))
   }
 
+  const setListAndGetNames = (list) => {
+    setList(list)
+    setLists(lists.map(l => l.id === list.id ? list : l))
+    setShared(shared.map(l => l.id === list.id ? list : l))
+    getProductNames(list)
+  }
+
   const updateAndRefreshList = (list) => {
     return updateList(list)
       .then(() => getList(list.id))
-      .then(res => {
-        setList(res.data)
-        setLists(lists.map(l => l.id === list.id ? res.data : l))
-        getProductNames(res.data)
-      })
+      .then(res => setListAndGetNames(res.data))
   }
 
   const addProductToList = (id, amount, list) => {
@@ -284,12 +294,9 @@ function Main() {
         {createListInput(createAndActivateNewList)}
         <hr className="Separator"></hr>
 
-        {createRows(lists, shared, list.id, (list) => {
+        {createRows(lists ? lists : [], shared ? shared : [], list.id, (list) => {
           getList(list.id)
-            .then(res => {
-              setList(res.data)
-              getProductNames(res.data)
-            })
+            .then(res => setListAndGetNames(res.data))
         }, (list, shared) => {
           if (shared) {
             removeSharedList(list.id)
