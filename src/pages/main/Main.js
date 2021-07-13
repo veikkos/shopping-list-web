@@ -199,13 +199,17 @@ function Main() {
       .then(res => setListAndGetNames(res.data))
   }
 
-  const addProductToList = (id, amount, list) => {
+  const addProductToList = (id, name, amount, list) => {
     return getList(list.id)
       .then(res => {
-        res.data.products.push({ id, amount, collected: false })
-        return updateAndRefreshList({
-          ...res.data,
-        })
+        if (!res.data.products.find(product => name === productNames[product.id])) {
+          res.data.products.push({ id, amount, collected: false })
+          return updateAndRefreshList({
+            ...res.data,
+          })
+        } else {
+          return setListAndGetNames(res.data)
+        }
       })
   }
 
@@ -220,7 +224,7 @@ function Main() {
           const previous = res.data.find(product => product.name === name)
 
           if (previous) {
-            addProductToList(previous.id, amount, list)
+            addProductToList(previous.id, name, amount, list)
           } else {
             axios.post(`${url}/products`, {
               name,
@@ -230,7 +234,7 @@ function Main() {
               const id = res.data
               productNames[id] = name
               setProductNames({ ...productNames })
-              addProductToList(id, amount, list)
+              addProductToList(id, name, amount, list)
             })
           }
         })
