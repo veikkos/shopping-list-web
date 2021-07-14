@@ -11,19 +11,15 @@ export const createProducts = (list, productNames, amountChanged, checkChanged, 
           <tr className={product.collected ? 'Collected' : ''} key={product.id}>
             <td className="TextAlignLeft">{product.id ? productNames[product.id] : ''}</td>
             <td>
-              <div className="input-group Center">
+              <div className="input-group">
                 <input id="product-amount"
-                  style={{ marginRight: '5px' }}
-                  className="InputItem AmountInput input-group-text"
+                  className="AmountInput input-group-text"
                   type="number"
                   value={product.amount}
                   min="1"
                   max="100"
                   onChange={event => amountChanged(event, list, product)}>
                 </input>
-                <div className="input-group-append">
-                  <span>pcs</span>
-                </div>
               </div>
             </td>
             <td className="TextAlignCenter">

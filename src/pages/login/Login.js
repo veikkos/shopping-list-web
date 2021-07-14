@@ -20,11 +20,12 @@ function Main() {
     <div className="App">
       <Header />
       <div className="View">
-        <div className="Center">
+        <div className="Center"
+          style={{ margin: '0 20px' }}>
           <LoginButton />
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   )
 }
