@@ -241,9 +241,20 @@ function Main() {
     }
   }
 
-  const checkChanged = (event, list, product) => {
+  const amountChanged = (event, list, product) =>
+    productChanged(list, product, event.target.value, null)
+
+  const checkChanged = (event, list, product) =>
+    productChanged(list, product, null, event.target.checked)
+
+  const productChanged = (list, product, amount, collected) => {
     const updateProduct = product
-    updateProduct.collected = event.target.checked
+    if (collected !== null) {
+      updateProduct.collected = collected
+    }
+    if (amount !== null) {
+      updateProduct.amount = amount
+    }
     return getList(list.id)
       .then(res => {
         const l = res.data
@@ -337,7 +348,7 @@ function Main() {
         }
         <hr className="Separator"></hr>
         {list.products ?
-          createProducts(list, productNames, checkChanged, productRemoved) :
+          createProducts(list, productNames, amountChanged, checkChanged, productRemoved) :
           null}
       </div>
     )

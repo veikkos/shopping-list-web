@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const createProducts = (list, productNames, checkChanged, removed) => {
+export const createProducts = (list, productNames, amountChanged, checkChanged, removed) => {
   const notCollected = list.products.filter(product => !product.collected)
   const collected = list.products.filter(product => product.collected)
 
@@ -10,12 +10,27 @@ export const createProducts = (list, productNames, checkChanged, removed) => {
         return (
           <tr className={product.collected ? 'Collected' : ''} key={product.id}>
             <td className="TextAlignLeft">{product.id ? productNames[product.id] : ''}</td>
-            <td className="ProductLine TextAlignCenter">{product.amount} pcs</td>
+            <td>
+              <div className="input-group Center">
+                <input id="product-amount"
+                  style={{ marginRight: '5px' }}
+                  className="InputItem AmountInput input-group-text"
+                  type="number"
+                  value={product.amount}
+                  min="1"
+                  max="100"
+                  onChange={event => amountChanged(event, list, product)}>
+                </input>
+                <div className="input-group-append">
+                  <span>pcs</span>
+                </div>
+              </div>
+            </td>
             <td className="TextAlignCenter">
               <label>Collected:
                 <input className="form-check-input"
                   type="checkbox"
-                  style={{ marginLeft: '10px' }}
+                  style={{ marginLeft: '5px' }}
                   checked={product.collected ? true : false}
                   onChange={event => checkChanged(event, list, product)}>
                 </input>
@@ -44,7 +59,7 @@ export const createProducts = (list, productNames, checkChanged, removed) => {
 
   return (
     <div className="MarginHorizontal">
-      <table style={{ width: '100%' }}>
+      <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 5px' }}>
         <tbody className="MarginHorizontal">
           {renderList(notCollected)}
           {collected.length ? clearCollectedButton() : null}
