@@ -6,7 +6,7 @@ const Footer = () => (
       <a target="_blank"
         rel="noreferrer"
         href={process.env.REACT_APP_SOURCE_CODE_URL}>Source Code @ GitHub
-        <i className="bi-github Title"
+        <i className="bi-github White"
           style={{ marginLeft: '5px' }}
           role="img"
           aria-label="GitHub" />

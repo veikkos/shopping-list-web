@@ -357,7 +357,7 @@ function Main() {
   const headerActions = () => {
     return (
       <div className="Flex">
-        {list.id ? <i className="bi bi-share-fill InputItem Flex Title"
+        {list.id ? <i className="bi bi-share-fill InputItem Flex White"
           onClick={() => shareList()}
           style={{ marginRight: '20px' }}></i> : null}
         <LogoutButton />

@@ -16,7 +16,7 @@
   display: inline-block;
 }
 
-.Title {
+.White {
   color: white;
 }
 
@@ -78,7 +78,7 @@
 }
 
 .AmountInput {
-  width: 60px;
+  width: 70px;
 }
 
 .InputItem {
@@ -167,4 +167,8 @@ a:link, a:visited, a:active {
 a:hover {
   color: white;
   text-decoration: underline;
+}
+
+input[type="number"]:enabled {
+  background-color:white;
 }
