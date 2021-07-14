@@ -2,7 +2,8 @@ import React from 'react'
 
 const Footer = () => (
   <div className="Footer Flex">
-    <div className="FlexGrow TextAlignCenter container">
+    <div className="FlexGrow TextAlignCenter Center"
+      style={{ padding: '2px 0' }}>
       <a target="_blank"
         rel="noreferrer"
         href={process.env.REACT_APP_SOURCE_CODE_URL}>Source Code @ GitHub
