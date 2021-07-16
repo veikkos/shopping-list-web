@@ -1,7 +1,6 @@
 import '../App.css'
 import React, { useState, useEffect, Fragment } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
 import { isMobile } from 'react-device-detect'
 import { createRows } from '../../components/shopping_lists'
@@ -13,12 +12,7 @@ import Footer from '../../components/footer'
 import LogoutButton from '../../components/logout_button'
 import ShareModal from '../../components/share_modal'
 import Progress from '../../components/progress'
-
-const url = process.env.REACT_APP_BACKEND_URL
-
-const headers = token => ({
-  Authorization: `Bearer ${token}`
-})
+import { Lists, List, Products, Product, Shared } from '../../util/requests'
 
 const useQuery = () => new URLSearchParams(useLocation().search)
 
@@ -34,16 +28,14 @@ function Main() {
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareAdded, setShareAdded] = useState(false)
 
-  const refreshSharedLists = () => axios.get(`${url}/shared`, {
-    headers: headers(token)
-  }).then(res => {
+  const refreshSharedLists = () => Shared.GET(token).then(res => {
     switch (res.status) {
     case 200:
       if (res.data.lists && res.data.lists.length) {
         const promises =
-              res.data.lists.map(listId => getList(listId)
-                .then(res => res.data)
-                .catch(() => { }))
+            res.data.lists.map(listId => List.GET(token, listId)
+              .then(res => res.data)
+              .catch(() => { }))
 
         return Promise.all(promises)
           .then(res => setShared(res.filter(s => s)))
@@ -59,26 +51,15 @@ function Main() {
     }
   })
 
-  const postSharedLists = newLists => axios.post(`${url}/shared`, {
-    lists: newLists
-  }, {
-    headers: headers(token)
-  })
+  const removeSharedList = id =>
+    Shared.POST(token, shared.filter(s => s.id !== id).map(s => s.id))
 
-  const removeSharedList = id => postSharedLists(shared.filter(s => s.id !== id).map(s => s.id))
-
-  const refreshLists = () => axios.get(`${url}/lists`, {
-    headers: headers(token)
-  }).then(res => {
+  const refreshLists = () => Lists.GET(token).then(res => {
     setLists(res.data)
     return res.data
   })
 
-  const getProducts = () => axios.get(`${url}/products`, {
-    headers: headers(token)
-  })
-
-  const refreshSuggestions = () => getProducts()
+  const refreshSuggestions = () => Products.GET(token)
     .then(res => {
       setProductNames({
         ...productNames,
@@ -114,7 +95,7 @@ function Main() {
         !lists.find(s => s.id === newSharedList) &&
         !shared.find(s => s.id === newSharedList)) {
         setShareAdded(true)
-        postSharedLists(shared.map(s => s.id).concat(newSharedList))
+        Shared.POST(token, shared.map(s => s.id).concat(newSharedList))
           .then(refreshSharedLists)
       }
     }
@@ -132,9 +113,7 @@ function Main() {
   const getProductNames = list => {
     const promises = list.products
       .filter(product => !productNames[product.id])
-      .map(product => axios.get(`${url}/products?id=${product.id}`, {
-        headers: headers(token)
-      }).then(res => ({
+      .map(product => Product.GET(token, product.id).then(res => ({
         id: res.data.id,
         name: res.data.name,
       })).catch(() => { }))
@@ -148,23 +127,11 @@ function Main() {
       })
   }
 
-  const getList = id => axios.get(`${url}/lists?id=${id}`, {
-    headers: headers(token)
-  })
-
-  const putList = list => axios.put(`${url}/lists?id=${list.id}`, list, {
-    headers: headers(token)
-  })
-
   const clearCurrentListIfNeeded = id => {
     if (list.id === id) {
       setList({})
     }
   }
-
-  const deleteList = l => axios.delete(`${url}/lists?id=${l.id}`, {
-    headers: headers(token)
-  }).then(clearCurrentListIfNeeded(l.id))
 
   const setListAndGetNames = list => {
     setList(list)
@@ -173,11 +140,11 @@ function Main() {
     getProductNames(list)
   }
 
-  const updateAndRefreshList = list => putList(list)
-    .then(() => getList(list.id))
+  const updateAndRefreshList = list => List.PUT(token, list)
+    .then(() => List.GET(token, list.id))
     .then(res => setListAndGetNames(res.data))
 
-  const addProductToList = (id, name, amount, list) => getList(list.id)
+  const addProductToList = (id, name, amount, list) => List.GET(token, list.id)
     .then(res => {
       if (!res.data.products.find(product => name === productNames[product.id])) {
         res.data.products.push({ id, amount, collected: false })
@@ -195,18 +162,14 @@ function Main() {
     const amount = event.target[2].value
 
     if (name) {
-      getProducts()
+      Products.GET(token)
         .then(res => {
           const previous = res.data.find(product => product.name === name)
 
           if (previous) {
             addProductToList(previous.id, name, amount, list)
           } else {
-            axios.post(`${url}/products`, {
-              name,
-            }, {
-              headers: headers(token)
-            }).then(res => {
+            Products.POST(token, name).then(res => {
               const id = res.data
               productNames[id] = name
               setProductNames({ ...productNames })
@@ -231,7 +194,7 @@ function Main() {
     if (amount !== null) {
       updateProduct.amount = amount
     }
-    return getList(list.id)
+    return List.GET(token, list.id)
       .then(res => {
         const l = res.data
         updateAndRefreshList({
@@ -243,7 +206,7 @@ function Main() {
 
   const productRemoved = (list, products) => {
     const idsToRemove = products.map(product => product.id)
-    return getList(list.id)
+    return List.GET(token, list.id)
       .then(res => {
         const l = res.data
         updateAndRefreshList({
@@ -258,12 +221,7 @@ function Main() {
     const name = event.target[0].value
 
     if (name) {
-      axios.post(`${url}/lists`, {
-        name,
-        products: []
-      }, {
-        headers: headers(token)
-      })
+      Lists.POST(token, name)
         .then(res => refreshLists().then(l => ({ lists: l, id: res.data })))
         .then(res => {
           const newList = res.lists.find(l => l.id === res.id)
@@ -288,7 +246,7 @@ function Main() {
       <hr className="Separator"></hr>
 
       {createRows(lists ? lists : [], shared ? shared : [], list.id, list => {
-        getList(list.id)
+        List.GET(token, list.id)
           .then(res => setListAndGetNames(res.data))
       }, (list, shared) => {
         if (shared) {
@@ -296,7 +254,8 @@ function Main() {
             .then(clearCurrentListIfNeeded(list.id))
             .then(refreshSharedLists)
         } else {
-          deleteList(list)
+          List.DELETE(token, list.id)
+            .then(clearCurrentListIfNeeded(list.id))
             .then(refreshLists)
         }
       })}
