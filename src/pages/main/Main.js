@@ -20,9 +20,7 @@ const headers = token => ({
   Authorization: `Bearer ${token}`
 })
 
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search)
-}
+const useQuery = () => new URLSearchParams(useLocation().search)
 
 function Main() {
   const { user, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
@@ -36,72 +34,60 @@ function Main() {
   const [showShareModal, setShowShareModal] = useState(false)
   const [shareAdded, setShareAdded] = useState(false)
 
-  const refreshSharedLists = () => {
-    return axios.get(`${url}/shared`, {
-      headers: headers(token)
-    }).then(res => {
-      switch (res.status) {
-      case 200:
-        if (res.data.lists && res.data.lists.length) {
-          const promises =
+  const refreshSharedLists = () => axios.get(`${url}/shared`, {
+    headers: headers(token)
+  }).then(res => {
+    switch (res.status) {
+    case 200:
+      if (res.data.lists && res.data.lists.length) {
+        const promises =
               res.data.lists.map(listId => getList(listId)
                 .then(res => res.data)
                 .catch(() => { }))
 
-          return Promise.all(promises)
-            .then(res => setShared(res.filter(s => s)))
-        } else {
-          setShared([])
-        }
-        break
-      case 204:
+        return Promise.all(promises)
+          .then(res => setShared(res.filter(s => s)))
+      } else {
         setShared([])
-        break
-      default:
-        break
       }
-    })
-  }
+      break
+    case 204:
+      setShared([])
+      break
+    default:
+      break
+    }
+  })
 
-  const postSharedLists = newLists => {
-    return axios.post(`${url}/shared`, {
-      lists: newLists
-    }, {
-      headers: headers(token)
-    })
-  }
+  const postSharedLists = newLists => axios.post(`${url}/shared`, {
+    lists: newLists
+  }, {
+    headers: headers(token)
+  })
 
-  const removeSharedList = id => {
-    return postSharedLists(shared.filter(s => s.id !== id).map(s => s.id))
-  }
+  const removeSharedList = id => postSharedLists(shared.filter(s => s.id !== id).map(s => s.id))
 
-  const refreshLists = () => {
-    return axios.get(`${url}/lists`, {
-      headers: headers(token)
-    }).then(res => {
-      setLists(res.data)
-      return res.data
-    })
-  }
+  const refreshLists = () => axios.get(`${url}/lists`, {
+    headers: headers(token)
+  }).then(res => {
+    setLists(res.data)
+    return res.data
+  })
 
-  const getProducts = () => {
-    return axios.get(`${url}/products`, {
-      headers: headers(token)
-    })
-  }
+  const getProducts = () => axios.get(`${url}/products`, {
+    headers: headers(token)
+  })
 
-  const refreshSuggestions = () => {
-    return getProducts()
-      .then(res => {
-        setProductNames({
-          ...productNames,
-          ...res.data.reduce((acc, item) => {
-            acc[item.id] = item.name
-            return acc
-          }, {})
-        })
+  const refreshSuggestions = () => getProducts()
+    .then(res => {
+      setProductNames({
+        ...productNames,
+        ...res.data.reduce((acc, item) => {
+          acc[item.id] = item.name
+          return acc
+        }, {})
       })
-  }
+    })
 
   useEffect(() => {
     if (user) {
@@ -143,19 +129,15 @@ function Main() {
   const isInitialLoading = () =>
     !lists || !shared || isLoading || !token
 
-  const getProductNames = (list) => {
+  const getProductNames = list => {
     const promises = list.products
       .filter(product => !productNames[product.id])
-      .map(product => {
-        return axios.get(`${url}/products?id=${product.id}`, {
-          headers: headers(token)
-        }).then(res => {
-          return {
-            id: res.data.id,
-            name: res.data.name,
-          }
-        }).catch(() => { })
-      })
+      .map(product => axios.get(`${url}/products?id=${product.id}`, {
+        headers: headers(token)
+      }).then(res => ({
+        id: res.data.id,
+        name: res.data.name,
+      })).catch(() => { }))
 
     return Promise.all(promises)
       .then(products => {
@@ -166,17 +148,13 @@ function Main() {
       })
   }
 
-  const getList = (id) => {
-    return axios.get(`${url}/lists?id=${id}`, {
-      headers: headers(token)
-    })
-  }
+  const getList = id => axios.get(`${url}/lists?id=${id}`, {
+    headers: headers(token)
+  })
 
-  const putList = (list) => {
-    return axios.put(`${url}/lists?id=${list.id}`, list, {
-      headers: headers(token)
-    })
-  }
+  const putList = list => axios.put(`${url}/lists?id=${list.id}`, list, {
+    headers: headers(token)
+  })
 
   const clearCurrentListIfNeeded = id => {
     if (list.id === id) {
@@ -184,38 +162,32 @@ function Main() {
     }
   }
 
-  const deleteList = (l) => {
-    return axios.delete(`${url}/lists?id=${l.id}`, {
-      headers: headers(token)
-    }).then(clearCurrentListIfNeeded(l.id))
-  }
+  const deleteList = l => axios.delete(`${url}/lists?id=${l.id}`, {
+    headers: headers(token)
+  }).then(clearCurrentListIfNeeded(l.id))
 
-  const setListAndGetNames = (list) => {
+  const setListAndGetNames = list => {
     setList(list)
     setLists(lists.map(l => l.id === list.id ? list : l))
     setShared(shared.map(l => l.id === list.id ? list : l))
     getProductNames(list)
   }
 
-  const updateAndRefreshList = (list) => {
-    return putList(list)
-      .then(() => getList(list.id))
-      .then(res => setListAndGetNames(res.data))
-  }
+  const updateAndRefreshList = list => putList(list)
+    .then(() => getList(list.id))
+    .then(res => setListAndGetNames(res.data))
 
-  const addProductToList = (id, name, amount, list) => {
-    return getList(list.id)
-      .then(res => {
-        if (!res.data.products.find(product => name === productNames[product.id])) {
-          res.data.products.push({ id, amount, collected: false })
-          return updateAndRefreshList({
-            ...res.data,
-          })
-        } else {
-          return setListAndGetNames(res.data)
-        }
-      })
-  }
+  const addProductToList = (id, name, amount, list) => getList(list.id)
+    .then(res => {
+      if (!res.data.products.find(product => name === productNames[product.id])) {
+        res.data.products.push({ id, amount, collected: false })
+        return updateAndRefreshList({
+          ...res.data,
+        })
+      } else {
+        return setListAndGetNames(res.data)
+      }
+    })
 
   const addProduct = (event, list) => {
     event.preventDefault()
@@ -292,9 +264,7 @@ function Main() {
       }, {
         headers: headers(token)
       })
-        .then(res => {
-          return refreshLists().then(l => { return { lists: l, id: res.data } })
-        })
+        .then(res => refreshLists().then(l => ({ lists: l, id: res.data })))
         .then(res => {
           const newList = res.lists.find(l => l.id === res.id)
           if (newList) {
@@ -312,62 +282,52 @@ function Main() {
     setShowShareModal(true)
   }
 
-  const renderLists = () => {
-    return (
-      <div className={`List ${isMobile ? '' : 'ListFull'}`}>
-        {createListInput(createAndActivateNewList)}
-        <hr className="Separator"></hr>
+  const renderLists = () => (
+    <div className={`List ${isMobile ? '' : 'ListFull'}`}>
+      {createListInput(createAndActivateNewList)}
+      <hr className="Separator"></hr>
 
-        {createRows(lists ? lists : [], shared ? shared : [], list.id, (list) => {
-          getList(list.id)
-            .then(res => setListAndGetNames(res.data))
-        }, (list, shared) => {
-          if (shared) {
-            removeSharedList(list.id)
-              .then(clearCurrentListIfNeeded(list.id))
-              .then(refreshSharedLists)
-          } else {
-            deleteList(list)
-              .then(refreshLists)
-          }
-        })}
-      </div>
-    )
-  }
-
-  const getSuggestions = () => {
-    return Object.keys(productNames).map(key => productNames[key])
-      .filter((elem, index, self) => {
-        return index === self.indexOf(elem)
-      })
-      .sort()
-  }
-
-  const renderContent = () => {
-    return (
-      <div className={`Content ${isMobile ? 'FlexGrow' : 'ContentFull'}`}>
-        {createInput(list.id,
-          getSuggestions(),
-          (event) => addProduct(event, list))
+      {createRows(lists ? lists : [], shared ? shared : [], list.id, list => {
+        getList(list.id)
+          .then(res => setListAndGetNames(res.data))
+      }, (list, shared) => {
+        if (shared) {
+          removeSharedList(list.id)
+            .then(clearCurrentListIfNeeded(list.id))
+            .then(refreshSharedLists)
+        } else {
+          deleteList(list)
+            .then(refreshLists)
         }
-        <hr className="Separator"></hr>
-        {list.products ?
-          createProducts(list, productNames, amountChanged, checkChanged, productRemoved) :
-          null}
-      </div>
-    )
-  }
+      })}
+    </div>
+  )
 
-  const headerActions = () => {
-    return (
-      <div className="Flex">
-        {list.id ? <i className="bi bi-share-fill InputItem Flex White"
-          onClick={() => shareList()}
-          style={{ marginRight: '20px' }}></i> : null}
-        <LogoutButton />
-      </div>
-    )
-  }
+  const getSuggestions = () => Object.keys(productNames).map(key => productNames[key])
+    .filter((elem, index, self) => index === self.indexOf(elem))
+    .sort()
+
+  const renderContent = () => (
+    <div className={`Content ${isMobile ? 'FlexGrow' : 'ContentFull'}`}>
+      {createInput(list.id,
+        getSuggestions(),
+        event => addProduct(event, list))
+      }
+      <hr className="Separator"></hr>
+      {list.products ?
+        createProducts(list, productNames, amountChanged, checkChanged, productRemoved) :
+        null}
+    </div>
+  )
+
+  const headerActions = () => (
+    <div className="Flex">
+      {list.id ? <i className="bi bi-share-fill InputItem Flex White"
+        onClick={() => shareList()}
+        style={{ marginRight: '20px' }}></i> : null}
+      <LogoutButton />
+    </div>
+  )
 
   return (
     <div className="App">
