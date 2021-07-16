@@ -17,7 +17,7 @@ import { Lists, List, Products, Product, Shared } from '../../util/requests'
 const useQuery = () => new URLSearchParams(useLocation().search)
 
 function Main() {
-  const { user, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
+  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
   const [lists, setLists] = useState(null)
   const [shared, setShared] = useState(null)
   const [list, setList] = useState({})
@@ -71,13 +71,13 @@ function Main() {
     })
 
   useEffect(() => {
-    if (user) {
+    if (getAccessTokenSilently) {
       getAccessTokenSilently()
         .then(t => {
           setToken(t)
         })
     }
-  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [getAccessTokenSilently]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (token) {
