@@ -12,6 +12,7 @@ import Header from '../../components/header'
 import Footer from '../../components/footer'
 import LogoutButton from '../../components/logout_button'
 import ShareModal from '../../components/share_modal'
+import Progress from '../../components/progress'
 
 const url = process.env.REACT_APP_BACKEND_URL
 
@@ -138,6 +139,9 @@ function Main() {
       history.push('/')
     }
   }, [isLoading, isAuthenticated]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const isInitialLoading = () =>
+    !lists || !shared || isLoading || !token
 
   const getProductNames = (list) => {
     const promises = list.products
@@ -374,15 +378,17 @@ function Main() {
       <Header actions={headerActions} />
       <div className={`View ${isMobile ? '' : 'ViewFull'}`}
         style={isMobile ? { display: 'flex', flexDirection: 'column' } : {}}>
-        {!isLoading ?
+        {!isInitialLoading() ?
           <Fragment>
             {renderLists()}
             {renderContent()}
           </Fragment> :
-          null}
+          <div className="Center">
+            <Progress />
+          </div>}
       </div>
       <Footer />
-    </div>
+    </div >
   )
 }
 

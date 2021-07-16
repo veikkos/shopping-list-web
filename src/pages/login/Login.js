@@ -24,8 +24,7 @@ function Main() {
         <div className="Center"
           style={{ margin: '0 20px' }}>
           {isLoading ?
-            <Progress />
-            :
+            <Progress /> :
             <LoginButton />
           }
         </div>
