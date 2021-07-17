@@ -1,6 +1,6 @@
 import '../App.css'
 import React, { useState, useEffect, Fragment } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import { isMobile } from 'react-device-detect'
 import { createRows } from '../../components/shopping_lists'
@@ -15,8 +15,7 @@ import Progress from '../../components/progress'
 import { Lists, List, Products, Product, Shared } from '../../util/requests'
 import { arrayToObjectByKey, objectToUniqueSortedArray } from '../../util/transformers'
 import { shareUrl } from '../../util/share'
-
-const useQuery = () => new URLSearchParams(useLocation().search)
+import { useQuery } from '../../util/parameters'
 
 function Main() {
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
@@ -77,7 +76,7 @@ function Main() {
           setToken(t)
         })
     }
-  }, [getAccessTokenSilently]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [getAccessTokenSilently])
 
   useEffect(() => {
     if (token) {
@@ -85,7 +84,7 @@ function Main() {
       refreshSuggestions()
       refreshSharedLists()
     }
-  }, [token]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [token])
 
   useEffect(() => {
     if (token && shared && lists) {
@@ -99,13 +98,13 @@ function Main() {
           .then(refreshSharedLists)
       }
     }
-  }, [token, shared, lists]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [token, shared, lists])
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       history.push('/')
     }
-  }, [isLoading, isAuthenticated]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isLoading, isAuthenticated])
 
   const isInitialLoading = () =>
     !lists || !shared || isLoading || !token
@@ -147,9 +146,9 @@ function Main() {
   const addProductToList = (id, name, amount, list) => List.GET(token, list.id)
     .then(res => {
       if (!res.data.products.find(product => name === productNames[product.id])) {
-        res.data.products.push({ id, amount, collected: false })
         return updateAndRefreshList({
           ...res.data,
+          products: res.data.products.concat({ id, amount, collected: false }),
         })
       } else {
         return setListAndGetNames(res.data)
