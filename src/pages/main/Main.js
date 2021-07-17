@@ -240,25 +240,27 @@ function Main() {
     setShowShareModal(true)
   }
 
+  const selectList = list =>
+    List.GET(token, list.id)
+      .then(res => setListAndGetNames(res.data))
+
+  const removeList = (list, shared) => {
+    if (shared) {
+      removeSharedList(list.id)
+        .then(clearCurrentListIfNeeded(list.id))
+        .then(refreshSharedLists)
+    } else {
+      List.DELETE(token, list.id)
+        .then(clearCurrentListIfNeeded(list.id))
+        .then(refreshLists)
+    }
+  }
+
   const renderLists = () => (
     <div className={`List ${isMobile ? '' : 'ListFull'}`}>
       {createListInput(createAndActivateNewList)}
       <hr className="Separator"></hr>
-
-      {createRows(lists ? lists : [], shared ? shared : [], list.id, list => {
-        List.GET(token, list.id)
-          .then(res => setListAndGetNames(res.data))
-      }, (list, shared) => {
-        if (shared) {
-          removeSharedList(list.id)
-            .then(clearCurrentListIfNeeded(list.id))
-            .then(refreshSharedLists)
-        } else {
-          List.DELETE(token, list.id)
-            .then(clearCurrentListIfNeeded(list.id))
-            .then(refreshLists)
-        }
-      })}
+      {createRows(lists, shared, list.id, selectList, removeList)}
     </div>
   )
 
