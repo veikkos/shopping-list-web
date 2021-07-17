@@ -13,6 +13,8 @@ import LogoutButton from '../../components/logout_button'
 import ShareModal from '../../components/share_modal'
 import Progress from '../../components/progress'
 import { Lists, List, Products, Product, Shared } from '../../util/requests'
+import { arrayToObjectByKey, objectToUniqueSortedArray } from '../../util/transformers'
+import { shareUrl } from '../../util/share'
 
 const useQuery = () => new URLSearchParams(useLocation().search)
 
@@ -54,19 +56,17 @@ function Main() {
   const removeSharedList = id =>
     Shared.POST(token, shared.filter(s => s.id !== id).map(s => s.id))
 
-  const refreshLists = () => Lists.GET(token).then(res => {
-    setLists(res.data)
-    return res.data
-  })
+  const refreshLists = () => Lists.GET(token)
+    .then(res => {
+      setLists(res.data)
+      return res.data
+    })
 
   const refreshSuggestions = () => Products.GET(token)
     .then(res => {
       setProductNames({
         ...productNames,
-        ...res.data.reduce((acc, item) => {
-          acc[item.id] = item.name
-          return acc
-        }, {})
+        ...arrayToObjectByKey(res.data, 'name')
       })
     })
 
@@ -232,11 +232,9 @@ function Main() {
     }
   }
 
-  const getShareUrl = () => `${window.location.origin}/app?share=${list.id}`
-
   const shareList = () => {
-    const shareUrl = getShareUrl()
-    navigator.clipboard.writeText(shareUrl)
+    const url = shareUrl(list.id)
+    navigator.clipboard.writeText(url)
     setShowShareModal(true)
   }
 
@@ -259,19 +257,15 @@ function Main() {
   const renderLists = () => (
     <div className={`List ${isMobile ? '' : 'ListFull'}`}>
       {createListInput(createAndActivateNewList)}
-      <hr className="Separator"></hr>
+      <hr className="Separator" />
       {createRows(lists, shared, list.id, selectList, removeList)}
     </div>
   )
 
-  const getSuggestions = () => Object.keys(productNames).map(key => productNames[key])
-    .filter((elem, index, self) => index === self.indexOf(elem))
-    .sort()
-
   const renderContent = () => (
     <div className={`Content ${isMobile ? 'FlexGrow' : 'ContentFull'}`}>
       {createInput(list.id,
-        getSuggestions(),
+        objectToUniqueSortedArray(productNames),
         event => addProduct(event, list))
       }
       <hr className="Separator"></hr>
