@@ -1,20 +1,21 @@
 import React from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { strings } from '../localization/localization'
 
 export const createInput = (enabled, productNames, callback) => (
   <fieldset disabled={enabled ? '' : 'disabled'}>
     <form className="InputFormWrapped" onSubmit={callback} >
-      <label className="Flex FlexGrow">Product:
+      <label className="Flex FlexGrow">{strings.product}:
         <Typeahead
           className="FlexGrow"
           style={{ display: 'inline-block', paddingLeft: '10px', marginRight: '10px' }}
           id="product"
-          placeholder="Milk, Butter..."
+          placeholder={strings.product_hint}
           options={productNames}
         />
       </label>
       <label>
-          Amount:
+        {strings.amount}:
         <input id="amount"
           className="InputItem AmountInput input-group-text"
           type="number"
@@ -25,7 +26,7 @@ export const createInput = (enabled, productNames, callback) => (
       </label>
       <input className="InputItem btn-sm btn-dark"
         type="submit"
-        value="Add"
+        value={strings.add}
       />
     </form>
   </fieldset>

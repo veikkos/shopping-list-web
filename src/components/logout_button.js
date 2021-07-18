@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
+import { strings } from '../localization/localization'
 
 const LogoutButton = () => {
   const { logout } = useAuth0()
@@ -8,7 +9,7 @@ const LogoutButton = () => {
     <button
       className="btn-sm btn-dark"
       onClick={() => logout({ returnTo: window.location.origin })}>
-      Log Out
+      {strings.log_out}
     </button>
   )
 }

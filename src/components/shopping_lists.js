@@ -1,4 +1,5 @@
 import React from 'react'
+import { strings } from '../localization/localization'
 
 export const createRows = (lists, sharedLists, selectedListId, selectList, removed) => {
   const allCollected = list => list.products && list.products.every(product => product.collected)
@@ -22,7 +23,7 @@ export const createRows = (lists, sharedLists, selectedListId, selectList, remov
       </td>
       <td className="PaddingHorizontal">
         <button className="btn-sm btn-danger Right"
-          onClick={() => removed(list, shared)}>Remove
+          onClick={() => removed(list, shared)}>{strings.remove}
         </button>
       </td>
     </tr>

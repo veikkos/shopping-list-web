@@ -1,4 +1,5 @@
 import React from 'react'
+import { strings } from '../localization/localization'
 
 export const createProducts = (list, productNames, amountChanged, checkChanged, removed) => {
   const notCollected = list.products.filter(product => !product.collected)
@@ -21,7 +22,7 @@ export const createProducts = (list, productNames, amountChanged, checkChanged, 
           </div>
         </td>
         <td className="TextAlignCenter">
-          <label>Collected:
+          <label>{strings.collected}:
             <input className="form-check-input"
               type="checkbox"
               style={{ marginLeft: '5px' }}
@@ -31,7 +32,9 @@ export const createProducts = (list, productNames, amountChanged, checkChanged, 
           </label>
         </td>
         <td className="TextAlignRight">
-          <button className="btn-sm btn-danger" onClick={() => removed(list, [product])}>Remove</button>
+          <button className="btn-sm btn-danger"
+            onClick={() => removed(list, [product])}>{strings.remove}
+          </button>
         </td>
       </tr >
     ))
@@ -42,7 +45,7 @@ export const createProducts = (list, productNames, amountChanged, checkChanged, 
       <td colSpan="4">
         <div className="TextAlignCenter">
           <button className="btn-sm btn-secondary MarginVertical"
-            onClick={() => removed(list, collected)}>Clear collected
+            onClick={() => removed(list, collected)}>{strings.clear_collected}
           </button>
         </div>
       </td>
