@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import { isMobile } from 'react-device-detect'
 import { createRows } from '../../components/shopping_lists'
-import { createInput } from '../../components/product_input'
+import { CreateInput } from '../../components/product_input'
 import { createProducts } from '../../components/product_list'
 import { createListInput } from '../../components/list_input'
 import Header from '../../components/header'
@@ -161,6 +161,8 @@ function Main() {
     const amount = event.target[2].value
 
     if (name) {
+      event.target.reset()
+
       Products.GET(token)
         .then(res => {
           const previous = res.data.find(product => product.name === name)
@@ -218,6 +220,7 @@ function Main() {
   const createAndActivateNewList = event => {
     event.preventDefault()
     const name = event.target[0].value
+    event.target.reset()
 
     if (name) {
       Lists.POST(token, name)
@@ -263,10 +266,11 @@ function Main() {
 
   const renderContent = () => (
     <div className={`Content ${isMobile ? 'FlexGrow' : 'ContentFull'}`}>
-      {createInput(list.id,
-        objectToUniqueSortedArray(productNames),
-        event => addProduct(event, list))
-      }
+      <CreateInput
+        enabled={list.id}
+        productNames={objectToUniqueSortedArray(productNames)}
+        callback={event => addProduct(event, list)}
+      />
       <hr className="Separator"></hr>
       {list.products ?
         createProducts(list, productNames, amountChanged, checkChanged, productRemoved) :
