@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { strings } from '../localization/localization'
 
-export const CreateInput = ({ enabled, productNames, callback }) => {
+export const ProductInput = ({ enabled, productNames, callback }) => {
   const typeaheadRef = useRef(null)
 
   return (

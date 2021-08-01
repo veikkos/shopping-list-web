@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import { isMobile } from 'react-device-detect'
 import { createRows } from '../../components/shopping_lists'
-import { CreateInput } from '../../components/product_input'
+import { ProductInput } from '../../components/product_input'
 import { createProducts } from '../../components/product_list'
 import { createListInput } from '../../components/list_input'
 import Header from '../../components/header'
@@ -266,7 +266,7 @@ function Main() {
 
   const renderContent = () => (
     <div className={`Content ${isMobile ? 'FlexGrow' : 'ContentFull'}`}>
-      <CreateInput
+      <ProductInput
         enabled={list.id}
         productNames={objectToUniqueSortedArray(productNames)}
         callback={event => addProduct(event, list)}
