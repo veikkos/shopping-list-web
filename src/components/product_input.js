@@ -10,6 +10,7 @@ export const ProductInput = ({ enabled, productNames, callback }) => {
       <form className="InputFormWrapped" onSubmit={event => {
         callback(event)
         typeaheadRef.current.clear()
+        typeaheadRef.current.focus()
       }} >
         <label className="Flex FlexGrow">{strings.product}:
           <Typeahead
