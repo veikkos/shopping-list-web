@@ -280,7 +280,7 @@ function Main() {
 
   const headerActions = () => (
     <div className="Flex">
-      {list.id ? <i className="bi bi-share-fill InputItem Flex White"
+      {list.id ? <i className="bi bi-share-fill InputItem Flex White Clickable"
         onClick={() => shareList()}
         style={{ marginRight: '20px' }}></i> : null}
       <LogoutButton />

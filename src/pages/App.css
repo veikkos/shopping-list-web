@@ -183,3 +183,7 @@ input[type="number"]:enabled {
   width: 60px;
   border-radius: 10px;
 }
+
+.Clickable {
+  cursor: pointer;
+}
