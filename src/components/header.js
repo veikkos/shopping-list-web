@@ -1,12 +1,15 @@
 import React from 'react'
+import { isMobile } from 'react-device-detect'
 
 const Header = ({ actions }) => (
-  <div className="Header Flex">
-    <div className="TitleContainer FlexGrow">
-      <span className="White">Shopping List Web</span>
-    </div>
-    <div className="TitleContainer Right">
-      {actions ? actions() : null}
+  <div className="Header">
+    <div className={`HeaderContainer Flex ${isMobile ? '' : 'MaxHeaderWidth'}`}>
+      <div className="TitleContainer FlexGrow">
+        <span className="White">Shopping List Web</span>
+      </div>
+      <div className="TitleContainer Right">
+        {actions ? actions() : null}
+      </div>
     </div>
   </div>
 )

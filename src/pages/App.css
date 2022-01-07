@@ -5,6 +5,18 @@
 
 .Header {
   background-color: #CC3F0C;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.HeaderContainer {
+  background-color: #CC3F0C;
+  flex: 1;
+}
+
+.MaxHeaderWidth {
+  max-width: 870px;
 }
 
 .Footer {
