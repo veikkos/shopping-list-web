@@ -17,6 +17,8 @@ export const strings = new LocalizedStrings({
     clear_collected: 'Clear collected',
     share_title: 'Share link copied!',
     share_body: 'Share link for list "{0}" copied to clipboard',
+    remove_title: 'Delete list?',
+    remove_body: 'Are you sure you want to delete list "{0}"?',
     close: 'Close',
   },
   fi: {
@@ -35,6 +37,8 @@ export const strings = new LocalizedStrings({
     clear_collected: 'Tyhjennä kerätyt',
     share_title: 'Jakolinkki kopioitu!',
     share_body: 'Jakolinkki listalle "{0}" kopioitu leikepöydälle',
+    remove_title: 'Vahvista poisto',
+    remove_body: 'Poistetaanko lista "{0}"?',
     close: 'Sulje',
   },
 })

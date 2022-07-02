@@ -11,6 +11,7 @@ import Header from '../../components/header'
 import Footer from '../../components/footer'
 import LogoutButton from '../../components/logout_button'
 import ShareModal from '../../components/share_modal'
+import RemoveModal from '../../components/remove_modal'
 import Progress from '../../components/progress'
 import { Lists, List, Products, Product, Shared } from '../../util/requests'
 import { arrayToObjectByKey, objectToUniqueSortedArray } from '../../util/transformers'
@@ -27,6 +28,7 @@ function Main() {
   const [token, setToken] = useState(null)
   const query = useQuery()
   const [showShareModal, setShowShareModal] = useState(false)
+  const [confirmListRemove, setConfirmListRemove] = useState(null)
   const [shareAdded, setShareAdded] = useState(false)
 
   const refreshSharedLists = () => Shared.GET(token).then(res => {
@@ -245,15 +247,9 @@ function Main() {
       .then(res => setListAndGetNames(res.data))
 
   const removeList = (list, shared) => {
-    if (shared) {
-      removeSharedList(list.id)
-        .then(clearCurrentListIfNeeded(list.id))
-        .then(refreshSharedLists)
-    } else {
-      List.DELETE(token, list.id)
-        .then(clearCurrentListIfNeeded(list.id))
-        .then(refreshLists)
-    }
+    setConfirmListRemove({
+      list, shared
+    })
   }
 
   const renderLists = () => (
@@ -292,6 +288,23 @@ function Main() {
       <ShareModal name={list.name}
         show={showShareModal}
         close={() => { setShowShareModal(false) }}
+      />
+      <RemoveModal title={confirmListRemove?.list.name}
+        show={!!confirmListRemove}
+        close={() => { setConfirmListRemove(null) }}
+        remove={() => {
+          const list = confirmListRemove.list
+          if (confirmListRemove.shared) {
+            removeSharedList(list.id)
+              .then(clearCurrentListIfNeeded(list.id))
+              .then(refreshSharedLists)
+          } else {
+            List.DELETE(token, list.id)
+              .then(clearCurrentListIfNeeded(list.id))
+              .then(refreshLists)
+          }
+          setConfirmListRemove(null)
+        }}
       />
       <Header actions={headerActions} />
       <div className={`View ${isMobile ? '' : 'ViewFull'}`}
