@@ -70,13 +70,13 @@ function Main() {
     })
 
   useEffect(() => {
-    if (getAccessTokenSilently) {
+    if (isAuthenticated && getAccessTokenSilently) {
       getAccessTokenSilently()
         .then(t => {
           setToken(t)
         })
     }
-  }, [getAccessTokenSilently])
+  }, [isAuthenticated, getAccessTokenSilently])
 
   useEffect(() => {
     if (token) {
