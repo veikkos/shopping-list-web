@@ -1,12 +1,14 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import * as ReactDOMClient from 'react-dom/client'
 import './index.css'
 import App from './pages/App'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ReactDOMClient.createRoot(
   document.getElementById('root')
 )
+  .render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  )
