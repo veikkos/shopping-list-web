@@ -1,6 +1,7 @@
 {
   "name": "shopping-list-web",
   "version": "1.0.0",
+  "homepage": "https://veikkos.github.io/shopping-list-web",
   "license": "MIT",
   "private": false,
   "dependencies": {
@@ -20,7 +21,8 @@
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "gh-pages": "^4.0.0"
   },
   "scripts": {
     "heroku-prebuild": "npm install -g serve",
@@ -28,7 +30,9 @@
     "start": "serve -s build",
     "build": "react-scripts build",
     "lint": "eslint .",
-    "lint-fix": "eslint --fix **/*.js"
+    "lint-fix": "eslint --fix **/*.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
