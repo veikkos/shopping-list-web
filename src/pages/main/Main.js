@@ -1,6 +1,5 @@
 import '../App.css'
 import React, { useState, useEffect, Fragment } from 'react'
-import { useHistory } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import { isMobile } from 'react-device-detect'
 import { createRows } from '../../components/shopping_lists'
@@ -24,13 +23,11 @@ function Main() {
   const [shared, setShared] = useState(null)
   const [list, setList] = useState({})
   const [productNames, setProductNames] = useState({})
-  const history = useHistory()
   const [token, setToken] = useState(null)
   const query = useQuery()
   const [showShareModal, setShowShareModal] = useState(false)
   const [confirmListRemove, setConfirmListRemove] = useState(null)
   const [shareAdded, setShareAdded] = useState(false)
-
   const refreshSharedLists = () => Shared.GET(token).then(res => {
     switch (res.status) {
     case 200:
@@ -101,12 +98,6 @@ function Main() {
       }
     }
   }, [token, shared, lists])
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      history.push('/')
-    }
-  }, [isLoading, isAuthenticated])
 
   const isInitialLoading = () =>
     !lists || !shared || isLoading || !token
