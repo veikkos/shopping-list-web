@@ -17,7 +17,7 @@ ReactDOMClient.createRoot(
           clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
           authorizationParams={{
             audience: process.env.REACT_APP_BACKEND_URL,
-            redirect_uri: window.location.origin,
+            redirect_uri: window.location.href,
           }}
         >
           <App />
