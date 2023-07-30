@@ -2,9 +2,9 @@
 
 [![Node.js CI](https://github.com/veikkos/shopping-list-web/actions/workflows/node.js.yml/badge.svg)](https://github.com/veikkos/shopping-list-web/actions/workflows/node.js.yml)
 
-[**Live at Heroku**](https://kauppalistat.herokuapp.com)
+[**Live at github.io**](https://veikkos.github.io/shopping-list-web)
 
-[![Screenshot](https://raw.githubusercontent.com/veikkos/shopping-list-web/master/media/cover.png)](https://kauppalistat.herokuapp.com)
+[![Screenshot](https://raw.githubusercontent.com/veikkos/shopping-list-web/master/media/cover.png)](https://veikkos.github.io/shopping-list-web)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -25,7 +25,7 @@ Application needs configured backend and following environment variables:
 
 In the project directory, you can run:
 
-### `npm start:dev`
+### `npm run start:dev`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
