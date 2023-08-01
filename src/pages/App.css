@@ -129,6 +129,10 @@ fieldset {
 
 .Flex {
   display: flex;
+}
+
+.FlexCenter {
+  display: flex;
   align-items: center;
 }
 

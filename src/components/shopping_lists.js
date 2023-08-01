@@ -5,8 +5,8 @@ export const createRows = (lists, sharedLists, selectedListId, selectList, remov
   const allCollected = list => list.products && list.products.every(product => product.collected)
 
   const renderList = (l, shared) => l.map(list => (
-    <tr className="FullWidth Flex" key={list.name}>
-      <td className={`ListTitle FlexGrow Flex Clickable ${selectedListId === list.id ? 'SelectedListTitle' : ''}`}>
+    <tr className="FullWidth FlexCenter" key={list.name}>
+      <td className={`ListTitle FlexGrow FlexCenter Clickable ${selectedListId === list.id ? 'SelectedListTitle' : ''}`}>
         <span
           onClick={() => selectList(list)}>{list.name}
         </span>

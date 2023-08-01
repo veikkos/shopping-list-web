@@ -2,7 +2,7 @@ import React from 'react'
 import { strings } from '../localization/localization'
 
 const Footer = () => (
-  <div className="Footer Flex">
+  <div className="Footer FlexCenter">
     <div className="FlexGrow TextAlignCenter Center"
       style={{ padding: '2px 0' }}>
       <a target="_blank"

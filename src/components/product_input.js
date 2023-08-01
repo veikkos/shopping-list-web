@@ -12,7 +12,7 @@ export const ProductInput = ({ enabled, productNames, callback }) => {
         typeaheadRef.current.clear()
         typeaheadRef.current.focus()
       }} >
-        <label className="Flex FlexGrow">{strings.product}:
+        <label className="FlexCenter FlexGrow">{strings.product}:
           <Typeahead
             className="FlexGrow"
             style={{ display: 'inline-block', paddingLeft: '10px', marginRight: '10px' }}
@@ -22,20 +22,22 @@ export const ProductInput = ({ enabled, productNames, callback }) => {
             ref={typeaheadRef}
           />
         </label>
-        <label>
-          {strings.amount}:
-          <input id="amount"
-            className="InputItem AmountInput input-group-text"
-            type="number"
-            defaultValue="1"
-            min="1"
-            max="100">
-          </input>
-        </label>
-        <input className="InputItem btn-sm btn-dark"
-          type="submit"
-          value={strings.add}
-        />
+        <div className="Flex">
+          <label>
+            {strings.amount}:
+            <input id="amount"
+              className="InputItem AmountInput input-group-text"
+              type="number"
+              defaultValue="1"
+              min="1"
+              max="100">
+            </input>
+          </label>
+          <input className="InputItem btn-sm btn-dark"
+            type="submit"
+            value={strings.add}
+          />
+        </div>
       </form>
     </fieldset>
   )
