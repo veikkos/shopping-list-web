@@ -6,8 +6,6 @@
 
 [![Screenshot](https://raw.githubusercontent.com/veikkos/shopping-list-web/master/media/cover.png)](https://veikkos.github.io/shopping-list-web)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 AWS back-end implementation at https://github.com/veikkos/shopping-list-backend.
 
 Implementation uses [Auth0](https://auth0.com/) for authentication.
