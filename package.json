@@ -24,7 +24,6 @@
     "gh-pages": "^4.0.0"
   },
   "scripts": {
-    "heroku-prebuild": "npm install -g serve",
     "start:dev": "react-scripts start",
     "start": "serve -s build",
     "build": "react-scripts build",
