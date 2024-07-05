@@ -1,4 +1,3 @@
-const url = new URL(window.location.href)
-const urlWithoutParams = `${url.protocol}//${url.hostname}${url.pathname}`
+import { urlWithoutParams } from './baseurl'
 
 export const shareUrl = id => `${urlWithoutParams}?share=${id}`
